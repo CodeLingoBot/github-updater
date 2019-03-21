@@ -533,30 +533,7 @@ class Base {
 	 *
 	 * @return string $new_source
 	 */
-	private function fix_misnamed_directory( $new_source, $remote_source, $upgrader_object, $slug ) {
-		if ( ! array_key_exists( $slug, (array) $upgrader_object->config ) &&
-			! isset( self::$options['remote_install'] )
-		) {
-			if ( $upgrader_object instanceof Plugin ) {
-				foreach ( (array) $upgrader_object->config as $plugin ) {
-					if ( $slug === $plugin->slug ) {
-						$new_source = trailingslashit( $remote_source ) . $slug;
-						break;
-					}
-				}
-			}
-			if ( $upgrader_object instanceof Theme ) {
-				foreach ( (array) $upgrader_object->config as $theme ) {
-					if ( $slug === $theme->slug ) {
-						$new_source = trailingslashit( $remote_source ) . $slug;
-						break;
-					}
-				}
-			}
-		}
-
-		return $new_source;
-	}
+	
 
 	/**
 	 * Renaming if using a GitLab Release Asset.
@@ -569,17 +546,7 @@ class Base {
 	 *
 	 * @return string $new_source
 	 */
-	private function fix_gitlab_release_asset_directory( $new_source, $remote_source, $upgrader_object, $slug ) {
-		if ( ( isset( $upgrader_object->config[ $slug ]->release_asset ) &&
-			$upgrader_object->config[ $slug ]->release_asset ) &&
-			! empty( $upgrader_object->config[ $slug ]->ci_job )
-		) {
-			$new_source = trailingslashit( dirname( $remote_source ) ) . $slug;
-			add_filter( 'upgrader_post_install', [ $this, 'upgrader_post_install' ], 10, 3 );
-		}
-
-		return $new_source;
-	}
+	
 
 	/**
 	 * Delete $source when updating from GitLab Release Asset.

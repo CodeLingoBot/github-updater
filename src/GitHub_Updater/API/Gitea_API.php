@@ -389,14 +389,7 @@ class Gitea_API extends API implements API_Interface {
 	/**
 	 * Add subtab to Settings page.
 	 */
-	private function add_settings_subtab() {
-		add_filter(
-			'github_updater_add_settings_subtabs',
-			function ( $subtabs ) {
-				return array_merge( $subtabs, [ 'gitea' => esc_html__( 'Gitea', 'github-updater' ) ] );
-			}
-		);
-	}
+	
 
 	/**
 	 * Print the Gitea Settings text.

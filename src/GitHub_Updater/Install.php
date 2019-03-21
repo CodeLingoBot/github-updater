@@ -247,51 +247,14 @@ class Install {
 	 * @param array $install_options Array of options from remote install process.
 	 * @return void
 	 */
-	private function save_options_on_install( $install_options ) {
-		self::$options = array_merge( self::$options, $install_options );
-		update_site_option( 'github_updater', self::$options );
-	}
+	
 
 	/**
 	 * Set remote install data into $_POST.
 	 *
 	 * @param array $config Data for a remote install.
 	 */
-	private function set_install_post_data( $config ) {
-		if ( ! isset( $config['uri'] ) ) {
-			return;
-		}
-
-		$headers = $this->parse_header_uri( $config['uri'] );
-		$api     = false !== strpos( $headers['host'], '.com' )
-			? rtrim( $headers['host'], '.com' )
-			: rtrim( $headers['host'], '.org' );
-
-		$api = isset( $config['git'] ) ? $config['git'] : $api;
-
-		$_POST['github_updater_repo']   = $config['uri'];
-		$_POST['github_updater_branch'] = $config['branch'];
-		$_POST['github_updater_api']    = $api;
-		$_POST['option_page']           = 'github_updater_install';
-
-		switch ( $api ) {
-			case 'github':
-				$_POST['github_access_token'] = $config['private'] ?: null;
-				break;
-			case 'bitbucket':
-				$_POST['is_private'] = $config['private'] ? '1' : null;
-				break;
-			case 'gitlab':
-				$_POST['gitlab_access_token'] = $config['private'] ?: null;
-				break;
-			case 'gitea':
-				$_POST['gitea_access_token'] = $config['private'] ?: null;
-				break;
-			case 'zipfile':
-				$_POST['zipfile_slug'] = $config['slug'];
-				break;
-		}
-	}
+	
 
 	/**
 	 * Get the appropriate upgrader for remote installation.
@@ -301,50 +264,7 @@ class Install {
 	 *
 	 * @return bool|\Plugin_Upgrader|\Theme_Upgrader
 	 */
-	private function get_upgrader( $type, $url ) {
-		$nonce    = wp_nonce_url( $url );
-		$upgrader = false;
-
-		if ( 'plugin' === $type ) {
-			$plugin = self::$install['repo'];
-
-			// Create a new instance of Plugin_Upgrader.
-			$skin     = static::is_wp_cli()
-				? new CLI_Plugin_Installer_Skin()
-				: new \Plugin_Installer_Skin( compact( 'type', 'url', 'nonce', 'plugin' ) );
-			$upgrader = new \Plugin_Upgrader( $skin );
-			add_filter(
-				'install_plugin_complete_actions',
-				[
-					$this,
-					'install_plugin_complete_actions',
-				],
-				10,
-				3
-			);
-		}
-
-		if ( 'theme' === $type ) {
-			$theme = self::$install['repo'];
-
-			// Create a new instance of Theme_Upgrader.
-			$skin     = static::is_wp_cli()
-				? new CLI_Theme_Installer_Skin()
-				: new \Theme_Installer_Skin( compact( 'type', 'url', 'nonce', 'theme' ) );
-			$upgrader = new \Theme_Upgrader( $skin );
-			add_filter(
-				'install_theme_complete_actions',
-				[
-					$this,
-					'install_theme_complete_actions',
-				],
-				10,
-				3
-			);
-		}
-
-		return $upgrader;
-	}
+	
 
 	/**
 	 * Create Install Plugin or Install Theme page.

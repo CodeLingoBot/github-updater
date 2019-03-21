@@ -441,14 +441,7 @@ class Bitbucket_API extends API implements API_Interface {
 	/**
 	 * Add subtab to Settings page.
 	 */
-	private function add_settings_subtab() {
-		add_filter(
-			'github_updater_add_settings_subtabs',
-			function ( $subtabs ) {
-				return array_merge( $subtabs, [ 'bitbucket' => esc_html__( 'Bitbucket', 'github-updater' ) ] );
-			}
-		);
-	}
+	
 
 	/**
 	 * Print the Bitbucket repo Settings text.

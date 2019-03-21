@@ -56,10 +56,7 @@ class Remote_Management {
 	/**
 	 * Load site options.
 	 */
-	private function load_options() {
-		self::$options_remote = get_site_option( 'github_updater_remote_management', [] );
-		self::$api_key        = get_site_option( 'github_updater_api_key' );
-	}
+	
 
 	/**
 	 * Ensure api key is set.
@@ -73,17 +70,7 @@ class Remote_Management {
 	/**
 	 * Load needed action/filter hooks.
 	 */
-	private function load_hooks() {
-		add_action( 'admin_init', [ $this, 'remote_management_page_init' ] );
-		add_action(
-			'github_updater_update_settings',
-			function ( $post_data ) {
-				$this->save_settings( $post_data );
-			}
-		);
-		add_filter( 'github_updater_add_admin_pages', [ $this, 'extra_admin_pages' ] );
-		$this->add_settings_tabs();
-	}
+	
 
 	/**
 	 * Return list of pages where GitHub Updater loads/runs.

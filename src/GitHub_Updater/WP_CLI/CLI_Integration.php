@@ -210,35 +210,7 @@ class CLI_Integration extends WP_CLI_Command {
 	 *
 	 * @return array $cli_config
 	 */
-	private function process_args( $uri, $assoc_args ) {
-		$token                 = isset( $assoc_args['token'] ) ? $assoc_args['token'] : false;
-		$bitbucket_private     = isset( $assoc_args['bitbucket-private'] ) ? $assoc_args['bitbucket-private'] : false;
-		$cli_config            = [];
-		$cli_config['uri']     = $uri;
-		$cli_config['private'] = $token ?: $bitbucket_private;
-		$cli_config['branch']  = isset( $assoc_args['branch'] ) ? $assoc_args['branch'] : 'master';
-		$cli_config['slug']    = isset( $assoc_args['slug'] ) ? $assoc_args['slug'] : null;
-
-		switch ( $assoc_args ) {
-			case isset( $assoc_args['github'] ):
-				$cli_config['git'] = 'github';
-				break;
-			case isset( $assoc_args['bitbucket'] ):
-				$cli_config['git'] = 'bitbucket';
-				break;
-			case isset( $assoc_args['gitlab'] ):
-				$cli_config['git'] = 'gitlab';
-				break;
-			case isset( $assoc_args['gitea'] ):
-				$cli_config['git'] = 'gitea';
-				break;
-			case isset( $assoc_args['zipfile'] ):
-				$cli_config['git'] = 'zipfile';
-				break;
-		}
-
-		return $cli_config;
-	}
+	
 
 	/**
 	 * Process branch setting for WP-CLI.
@@ -246,12 +218,7 @@ class CLI_Integration extends WP_CLI_Command {
 	 * @param array  $cli_config Config args.
 	 * @param string $slug Repository slug.
 	 */
-	private function process_branch( $cli_config, $slug ) {
-		$branch_data['github_updater_branch'] = $cli_config['branch'];
-		$branch_data['repo']                  = $slug;
-
-		Singleton::get_instance( 'Branch', $this )->set_branch_on_install( $branch_data );
-	}
+	
 }
 
 /**

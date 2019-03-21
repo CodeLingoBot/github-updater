@@ -69,10 +69,7 @@ class Theme extends Base {
 	 *
 	 * @link https://github.com/afragen/github-updater/issues/586
 	 */
-	private function delete_current_theme_cache() {
-		$cache_hash = md5( get_stylesheet_directory() );
-		wp_cache_delete( 'theme-' . $cache_hash, 'themes' );
-	}
+	
 
 	/**
 	 * Reads in WP_Theme class of each theme.

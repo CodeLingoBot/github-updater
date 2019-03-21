@@ -73,38 +73,7 @@ class Language_Pack_API extends API {
 	 *
 	 * @return array|bool|mixed
 	 */
-	private function get_language_pack_json( $git, $headers, $response ) {
-		switch ( $git ) {
-			case 'github':
-				$response = $this->api( '/repos/' . $headers['owner'] . '/' . $headers['repo'] . '/contents/language-pack.json' );
-				$response = isset( $response->content )
-					? json_decode( base64_decode( $response->content ) )
-					: null;
-				break;
-			case 'bitbucket':
-				$response = $this->api( '/2.0/repositories/' . $headers['owner'] . '/' . $headers['repo'] . '/src/master/language-pack.json' );
-				break;
-			case 'gitlab':
-				$id       = rawurlencode( $headers['owner'] . '/' . $headers['repo'] );
-				$response = $this->api( '/projects/' . $id . '/repository/files/language-pack.json' );
-				$response = isset( $response->content )
-					? json_decode( base64_decode( $response->content ) )
-					: null;
-				break;
-			case 'gitea':
-				$response = $this->api( '/repos/' . $headers['owner'] . '/' . $headers['repo'] . '/raw/master/language-pack.json' );
-				$response = isset( $response->content )
-					? json_decode( base64_decode( $response->content ) )
-					: null;
-				break;
-		}
-
-		if ( $this->validate_response( $response ) ) {
-			return false;
-		}
-
-		return $response;
-	}
+	
 
 	/**
 	 * Process $package for update transient.
@@ -115,29 +84,5 @@ class Language_Pack_API extends API {
 	 *
 	 * @return array|null|string
 	 */
-	private function process_language_pack_package( $git, $locale, $headers ) {
-		$package = null;
-		switch ( $git ) {
-			case 'github':
-				$package = [ 'https://github.com', $headers['owner'], $headers['repo'], 'blob/master' ];
-				$package = implode( '/', $package ) . $locale->package;
-				$package = add_query_arg( [ 'raw' => 'true' ], $package );
-				break;
-			case 'bitbucket':
-				$package = [ 'https://bitbucket.org', $headers['owner'], $headers['repo'], 'raw/master' ];
-				$package = implode( '/', $package ) . $locale->package;
-				break;
-			case 'gitlab':
-				$package = [ 'https://gitlab.com', $headers['owner'], $headers['repo'], 'raw/master' ];
-				$package = implode( '/', $package ) . $locale->package;
-				break;
-			case 'gitea':
-				// TODO: make sure this works as expected.
-				$package = [ $headers['uri'], 'raw/master' ];
-				$package = implode( '/', $package ) . $local->package;
-				break;
-		}
-
-		return $package;
-	}
+	
 }

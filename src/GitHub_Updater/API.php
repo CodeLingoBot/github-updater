@@ -268,16 +268,7 @@ class API {
 	 * @param mixed $response (JSON|string)
 	 * @return mixed $response JSON encoded.
 	 */
-	private function convert_body_string_to_json( $response ) {
-		if ( $this instanceof Gitea_API || $this instanceof Bitbucket_API || $this instanceof Bitbucket_Server_API ) {
-			$body = wp_remote_retrieve_body( $response );
-			if ( null === json_decode( $body ) ) {
-				$response['body'] = json_encode( $body );
-			}
-		}
-
-		return $response;
-	}
+	
 
 	/**
 	 * Return repo data for API calls.

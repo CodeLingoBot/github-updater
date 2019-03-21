@@ -239,46 +239,12 @@ class Rest_Update extends Base {
 	 *
 	 * @return string $current_branch Default return is 'master'.
 	 */
-	private function get_local_branch() {
-		$repo = false;
-		if ( isset( $_REQUEST['plugin'] ) ) {
-			$repos = Singleton::get_instance( 'Plugin', $this )->get_plugin_configs();
-			$repo  = isset( $repos[ $_REQUEST['plugin'] ] ) ? $repos[ $_REQUEST['plugin'] ] : false;
-		}
-		if ( isset( $_REQUEST['theme'] ) ) {
-			$repos = Singleton::get_instance( 'Theme', $this )->get_theme_configs();
-			$repo  = isset( $repos[ $_REQUEST['theme'] ] ) ? $repos[ $_REQUEST['theme'] ] : false;
-		}
-		$current_branch = $repo ?
-			Singleton::get_instance( 'Branch', $this )->get_current_branch( $repo ) :
-			'master';
-
-		return $current_branch;
-	}
+	
 
 	/**
 	 * Sets the source of the webhook to $_GET variable.
 	 */
-	private function get_webhook_source() {
-		switch ( $_SERVER ) {
-			case isset( $_SERVER['HTTP_X_GITHUB_EVENT'] ):
-				$webhook_source = 'GitHub webhook';
-				break;
-			case isset( $_SERVER['HTTP_X_EVENT_KEY'] ):
-				$webhook_source = 'Bitbucket webhook';
-				break;
-			case isset( $_SERVER['HTTP_X_GITLAB_EVENT'] ):
-				$webhook_source = 'GitLab webhook';
-				break;
-			case isset( $_SERVER['HTTP_X_GITEA_EVENT'] ):
-				$webhook_source = 'Gitea webhook';
-				break;
-			default:
-				$webhook_source = 'browser';
-				break;
-		}
-		$_GET['webhook_source'] = $webhook_source;
-	}
+	
 
 	/**
 	 * Append $response to debug.log and wp_die().
@@ -289,26 +255,5 @@ class Rest_Update extends Base {
 	 * 128 == JSON_PRETTY_PRINT
 	 * 64 == JSON_UNESCAPED_SLASHES
 	 */
-	private function log_exit( $response, $code ) {
-		$json_encode_flags = 128 | 64;
-
-		error_log( json_encode( $response, $json_encode_flags ) );
-
-		/**
-		 * Action hook after processing REST process.
-		 *
-		 * @since 8.6.0
-		 *
-		 * @param array $response
-		 * @param int   $code     HTTP response.
-		 */
-		do_action( 'github_updater_post_rest_process_request', $response, $code );
-
-		unset( $response['success'] );
-		if ( 200 === $code ) {
-			wp_die( wp_send_json_success( $response, $code ) );
-		} else {
-			wp_die( wp_send_json_error( $response, $code ) );
-		}
-	}
+	
 }

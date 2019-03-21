@@ -395,14 +395,7 @@ class Bitbucket_Server_API extends Bitbucket_API {
 	/**
 	 * Add subtab to Settings page.
 	 */
-	private function add_settings_subtab() {
-		add_filter(
-			'github_updater_add_settings_subtabs',
-			function ( $subtabs ) {
-				return array_merge( $subtabs, [ 'bbserver' => esc_html__( 'Bitbucket Server', 'github-updater' ) ] );
-			}
-		);
-	}
+	
 
 	/**
 	 * Add remote install feature, create endpoint.
